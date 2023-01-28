@@ -12,10 +12,12 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: '*'      // This option says it dosent care where the request originated from
+}))
 app.use(express.json())
 
-app.get('/', async (req, res) => {
+app.get('/', async (req, res) => {   // This is just in place for use as a test and can be removed
     res.status(200).send({
         message: 'Whats Up',
     })
@@ -23,13 +25,12 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
     try {
-        const prompt = req.body.prompt;
 
         const responce = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: '${prompt}',
+            prompt: req.body.prompt,
             temperature: 0,
-            max_tokens: 3000,
+            max_tokens: 128,
             top_p: 1,
             frequency_penalty: 0.5,
             presence_penalty:0,
