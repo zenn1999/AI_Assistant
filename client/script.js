@@ -36,7 +36,7 @@ function generateUniqueId() {
   const randomNumber = Math.random();
   const hexadecimalString = randomNumber.toString(16);
 
-  return 'id-${timeStamp}-${hexadecimalString}';
+  return `id-${timeStamp}-${hexadecimalString}`;
 }
 
 function chatStripe (isAi, value, uniqueId) {
@@ -77,10 +77,11 @@ const handleSubmit = async (e) => {
   loader(messageDiv)
 
   //fetch data from the server
-  const response = await fetch('http://localhost:5000', {
+  const response = await fetch('http://localhost:5000', {     //this address is fine if using on the local machine but if using over lan then use the ip instead of localhost
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
       prompt:data.get('prompt')
@@ -104,7 +105,7 @@ const handleSubmit = async (e) => {
 
 form.addEventListener('submit', handleSubmit);
 form.addEventListener('keyup', (e) => {
-  if (e.keyCode === 13) {
+  if (e.key === 'Enter') {
     handleSubmit(e);
   }
 })
